@@ -10,8 +10,13 @@
   </template>
   
   <script>
-  export default {
-    props: ['movies']
+import FlagIcon from './FlagIcon.vue';
+
+export default {
+  props: ['movies'],
+  components: {
+    FlagIcon
   }
+}
   </script>
   
