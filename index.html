@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -10,7 +9,18 @@
   <div id="app">
     <input v-model="query" type="text" placeholder="Cerca un film">
     <button @click="searchMovies">Cerca</button>
+
+    <section v-if="movies.length">
+      <ul>
+        <li v-for="movie in movies" :key="movie.id">
+          <h2>{{ movie.title }}</h2>
+          <p>Titolo originale: {{ movie.original_title }}</p>
+          <p>Lingua: {{ movie.original_language }}</p>
+          <p>Voto: {{ movie.vote_average }}</p>
+        </li>
+      </ul>
+    </section>
   </div>
-  <script src="app.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
