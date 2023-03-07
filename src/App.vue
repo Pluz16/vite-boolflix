@@ -4,7 +4,7 @@
       <input type="text" v-model="query" placeholder="Cerca un film">
       <button type="submit">Cerca</button>
     </form>
-    <movie-list v-if="movies.length" :movies="movies"></movie-list>
+    <!-- <movie-list v-if="movies.length" :movies="movies"></movie-list> -->
   </div>
 </template>
 
