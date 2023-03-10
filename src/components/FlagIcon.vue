@@ -11,6 +11,7 @@
   <style>
   .flag-icon {
     vertical-align: middle;
+    color: azure;
   }
   </style>
   
