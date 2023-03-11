@@ -1,43 +1,88 @@
 <template>
   <div>
-    <form @submit.prevent="searchMovies">
-      <input type="text" v-model="query" placeholder="Cerca un film">
-      <button type="submit">Cerca</button>
-    </form>
-    <MovieList v-if="movies.length" :movies="movies"></MovieList>
+    <Header />
+    <Main />
   </div>
 </template>
-
 <script>
-import axios from 'axios';
-import MovieList from './components/MovieList.vue';
-
-export default {
-  components: {
-    MovieList
-  },
-  data() {
-    return {
-      query: '',
-      movies: []
-    };
-  },
-  methods: {
-    searchMovies() {
-      axios.get('https://api.themoviedb.org/3/search/movie', {
-        params: {
-          api_key: 'a946afb71f9ea4953b4cb984bc564170',
-          query: this.query
-        }
-      })
-      .then(response => {
-        this.movies = response.data.results;
-      })
-      .catch(error => {
-        console.error(error);
-      });
+  import Header from './components/Header.vue';
+  import Main from './components/Main.vue';
+  import store from './store'
+  import axios from 'axios'
+  export default {
+    components: {
+      Main, 
+      Header
+    },
+    data() {
+      return {
+        store: store
+      }
+    },
+    computed: {
+      API_KEY() {
+        return this.store.config.API_KEY
+      },
+      BASE_URI() {
+        return this.store.config.BASE_URI
+      },
+      search() {
+        return this.store.search
+      },
+      moviesEndpoint() {
+        return this.BASE_URI + '/search/movie'
+      },
+      tvsEndpoint() {
+        return this.BASE_URI + '/search/tv'
+      }
+    },
+    watch: {
+      search(newVal,oldVal) {
+        this.fetchData()
+      }
+    },
+    methods: {
+      fetchData() {
+        console.log('fetch data')
+        this.fetchMovies()
+        this.fetchTVs()
+      },
+      fetchTVs() {
+        axios.get(this.tvsEndpoint,{
+          params: {
+            api_key: this.API_KEY,
+            query: this.search,
+            language: 'it-IT'
+          }
+        }).then((res) => {
+          console.log(res)
+          const { results } = res.data
+          this.store.tv = results
+          console.log(this.store.tv)
+        }).catch(() => {
+          this.store.tv = []
+        })
+      },
+      fetchMovies() {
+        axios.get(this.moviesEndpoint,{
+          params: {
+            api_key: this.API_KEY,
+            query: this.search,
+            language: 'it-IT'
+          }
+        }).then(res => {
+          console.log(res)
+          const { results } = res.data
+          this.store.movies = results
+          console.log(this.store.movies)
+        }).catch(() => {
+          this.store.movies = []
+        })
+      }
     }
+    
   }
-}
 </script>
+<style lang="scss" >
+</style>
 
